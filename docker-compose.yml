@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  newsletter.api:
+    image: ${DOCKER_REGISTRY-}newsletterapi
+    build:
+      context: .
+      dockerfile: Newsletter.API/Dockerfile
+    ports:
+      - "4201:80"
+    depends_on:
+      - sql_server
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=sql_server;Database=NewsletterDB;User Id=sa;Password=Th1sIsSecureP@ssword;TrustServerCertificate=True;MultipleActiveResultSets=true;"  # Adjust the connection string
+    networks:
+      - net_newsletter
+
+  sql_server:
+    image: mcr.microsoft.com/mssql/server:latest
+    environment:
+      SA_PASSWORD: Th1sIsSecureP@ssword
+      ACCEPT_EULA: Y
+    ports:
+      - "1433:1433"
+    networks:
+      - net_newsletter
+
+networks:
+  net_newsletter:
