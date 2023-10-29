@@ -23,7 +23,7 @@ namespace Application.Subscribers.Queries.GetSubscribers
 
         public async Task<SubscribersVM> Handle(GetSubscribersQuery request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation(string.Format("Getting subscriber list"));
+            _logger.LogInformation("Getting subscriber list");
             SubscribersVM subscribers = new SubscribersVM
             {
                 Sources = await _context.ReferralSources.Select(s => new ReferralSourceDTO { Id = s.Id, Name = s.Name }).ToListAsync(cancellationToken),
@@ -41,7 +41,7 @@ namespace Application.Subscribers.Queries.GetSubscribers
                     ReferralSourceId = s.ReferralSourceId,
                 }).OrderByDescending(a => a.Id).ToListAsync(cancellationToken)
             };
-            _logger.LogInformation(string.Format("Found {0} subscribers", subscribers.Subscribers.Count()));
+            _logger.LogInformation("Found {subscriberCount} subscribers", subscribers.Subscribers.Count);
             return subscribers;
         }
     }

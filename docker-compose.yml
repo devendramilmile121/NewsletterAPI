@@ -1,6 +1,16 @@
 version: '3.4'
 
 services:
+  sql_server:
+    image: mcr.microsoft.com/mssql/server:latest
+    environment:
+      SA_PASSWORD: Th1sIsSecureP@ssword
+      ACCEPT_EULA: Y
+    ports:
+      - "1433:1433"
+    networks:
+      - net_newsletter
+
   newsletter.api:
     image: ${DOCKER_REGISTRY-}newsletterapi
     build:
@@ -15,13 +25,14 @@ services:
     networks:
       - net_newsletter
 
-  sql_server:
-    image: mcr.microsoft.com/mssql/server:latest
+  newsletter.seq:
+    image: datalust/seq:latest
+    container_name: newsletter-seq
     environment:
-      SA_PASSWORD: Th1sIsSecureP@ssword
-      ACCEPT_EULA: Y
+      - ACCEPT_EULA=y
     ports:
-      - "1433:1433"
+      - 5341:5341
+      - 4203:80
     networks:
       - net_newsletter
 

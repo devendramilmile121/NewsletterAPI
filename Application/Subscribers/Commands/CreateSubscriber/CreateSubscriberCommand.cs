@@ -25,7 +25,7 @@ namespace Application.Subscribers.Commands.CreateSubscriber
 
         public async Task<int> Handle(CreateSubscriberCommand command, CancellationToken cancellationToken)
         {
-            _logger.LogInformation(string.Format("Adding {0} to subscriber list", command.Email));
+            _logger.LogInformation("Adding {Email} to subscriber list", command.Email);
             var entity = new Subscriber();
             entity.Email = command.Email;
             entity.Reason = command.Reason;
@@ -35,7 +35,7 @@ namespace Application.Subscribers.Commands.CreateSubscriber
             _context.Subscribers.Add(entity);
 
             await _context.SaveChangesAsync(cancellationToken);
-            _logger.LogInformation(string.Format("Added {0} to subscriber list with Id:{1}", command.Email, entity.Id));
+            _logger.LogInformation("Added {Email} to subscriber list with Id:{Id}", command.Email, entity.Id);
             return entity.Id;
         }
     }
