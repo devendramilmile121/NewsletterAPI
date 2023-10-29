@@ -4,11 +4,17 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Newsletter.API.Filters;
 using Newsletter.API.Infrastructure;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Register Serilog and Seq
+builder.Host.UseSerilog((context, loggerConf) =>
+    loggerConf.ReadFrom.Configuration(context.Configuration)
+);
+
 // Register API Exception Filter
-builder.Services.AddControllers(options => 
+builder.Services.AddControllers(options =>
     options.Filters.Add<ApiExceptionFilterAttribute>())
         .AddFluentValidation(x => x.AutomaticValidationEnabled = false);
 
